@@ -31,3 +31,9 @@
 1. style.css: Added -webkit-overflow-scrolling: touch to .h-scroll-box for smoother mobile scrolling. 2. InteractionManager.js: Boosted element-specific scroll sensitivity (X*3.0, Y*2.0) to make scrolling internal containers feel more responsive.
 
 ---
+
+## [2026-01-20 03:29:19] Bugfix: Re-apply CSS Fix
+
+1. Applied missing -webkit-overflow-scrolling: touch to style.css. 2. This ensures smooth scrolling on iOS devices for the Horizontal Gallery.
+
+---
