@@ -55,25 +55,46 @@ Implement a robust `DebugManager` class controlled by a flag `DEBUG_MODE = true`
     * Provide a UI button in the PIP overlay: "Download Session Log" (exports JSON).
 
 ## 5. File Structure Plan
-```text
+`text`
 /
+├── package.json
+├── vite.config.js
 ├── index.html
 ├── style.css
-├── main.js             # Entry point
-├── src/
-│   ├── VisionEngine.js     # MediaPipe setup & Coordinate Mapping
-│   ├── GestureRecognizer.js # Logic for Pinch, Open, Fist
-│   ├── CursorManager.js    # Virtual cursor DOM & Smoothing
-│   ├── InteractionManager.js # Conflict handling & Click triggering
-│   └── DebugManager.js     # Overlay, Logging, IndexedDB
+├── main.js             # Entry point / App initialization
+├── ship_it.sh          # Auto-commit script
+├── AI_DEV_LOG.md       # Development log
+└── src/
+    ├── VisionEngine.js     # MediaPipe setup & Coordinate Mapping
+    ├── GestureRecognizer.js # Logic for Pinch, Open, Fist
+    ├── CursorManager.js    # Virtual cursor DOM & Smoothing
+    ├── InteractionManager.js # Conflict handling & Click triggering
+    └── DebugManager.js     # Overlay, Logging, IndexedDB
 
-## 6. Implementation Instructions
-Phase 1: Set up Vite project, initialize MediaPipe, and render the Debug Overlay (Layer 1) first. We need to see the skeleton before moving the cursor.
 
-Phase 2: Implement VisionEngine with ROI mapping and CursorManager to move a div on screen.
+## 6. Implementation Roadmap
+**Phase 1:** Foundation & Debugging Set up Vite project, initialize MediaPipe, and render the Debug Overlay (Layer 1) first. Ensure camera input and skeleton tracking are visible before attempting cursor control.
 
-Phase 3: Implement GestureRecognizer and InteractionManager (The Blue Box focus logic).
+**Phase 2:** Cursor & Mapping Implement VisionEngine with ROI mapping and CursorManager to control the virtual cursor on the screen.
 
-Phase 4: Complete the Debug System (IndexedDB) and polish UI.
+**Phase 3:** Gestures & Interaction Implement GestureRecognizer (Pinch/Click logic) and InteractionManager (The Blue Box focus logic).
 
-Action: Please start by generating the project structure and the code for Phase 1 (Setup + Vision + Debug Overlay). I want to confirm I can see the camera and skeleton first.
+**Phase 4**: Optimization & Polish Complete the Debug System (IndexedDB), refine smoothing algorithms, and polish UI.
+
+## 7. Auto-Commit Protocol
+When you have completed a coding task or reached a stable milestone, you must follow this protocol to save your work and document your thought process.
+
+**Rules:**
+
+1. Document First: Do not just commit code. You must record your "Implementation Plan" and "Walkthrough" (what you changed and why).
+
+2. Use the Script: Do not run manual git commands. Use the provided ./ship_it.sh script.
+
+3. Escape Quotes: Be careful with double quotes inside the description to avoid breaking the shell command.
+
+**Command Format:**
+Run the script in the terminal using this format:
+
+```bash
+./ship_it.sh "Short Summary of Changes" "Detailed Explanation / Implementation Plan"
+```
