@@ -115,7 +115,16 @@ export class InteractionManager {
                 cursorManager.showVisual();
 
                 this.activeScrollElement = this.getScrollParent(element);
-                console.log('Scroll Target:', this.activeScrollElement);
+
+                // Debug Feedback
+                let targetName = 'Window';
+                if (this.activeScrollElement && this.activeScrollElement !== window) {
+                    targetName = this.activeScrollElement.className || this.activeScrollElement.tagName;
+                    this.activeScrollElement.style.outline = '2px solid rgba(0, 255, 0, 0.5)'; // Visual debug
+                    setTimeout(() => this.activeScrollElement.style.outline = '', 500);
+                }
+                console.log('Scroll Target:', targetName);
+                this.showToast(`Scrolling: ${targetName}`);
 
             } else {
                 // Continue Scrolling
