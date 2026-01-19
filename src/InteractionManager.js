@@ -153,12 +153,12 @@ export class InteractionManager {
 
                 // Apply Scroll
                 if (this.activeScrollElement && this.activeScrollElement !== window) {
-                    // Elements often need "faster" input to feel responsive
-                    this.activeScrollElement.scrollBy({
-                        left: deltaX * baseSens * 3.0, // Boost X for elements
-                        top: deltaY * baseSens * 2.0,  // Boost Y for elements
-                        behavior: 'auto'
-                    });
+                    // Direct manipulation is often more reliable than scrollBy on mobile
+                    const moveX = deltaX * baseSens * 3.0; // Boost X
+                    const moveY = deltaY * baseSens * 2.0;
+
+                    this.activeScrollElement.scrollLeft += moveX;
+                    this.activeScrollElement.scrollTop += moveY;
                 } else {
                     window.scrollBy(deltaX * baseSens * 1.5, deltaY * baseSens);
                 }

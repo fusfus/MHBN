@@ -49,3 +49,9 @@ Cleaned up duplicated sections in the verification steps.
 Replaced element.scrollBy() with direct scrollTop/scrollLeft assignment in InteractionManager.js. This is more reliable on mobile browsers for continuous gesture scrolling.
 
 ---
+
+## [2026-01-20 03:36:46] Bugfix: H-Scroll Final Fix
+
+Replaced element.scrollBy() with direct scrollLeft/scrollTop assignment. This bypasses potential mobile browser quirks with scrollBy() inside default-prevented contexts or rapid animation frames.
+
+---
