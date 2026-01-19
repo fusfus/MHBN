@@ -43,3 +43,9 @@
 Cleaned up duplicated sections in the verification steps.
 
 ---
+
+## [2026-01-20 03:36:32] Bugfix: Direct Scroll Manipulation
+
+Replaced element.scrollBy() with direct scrollTop/scrollLeft assignment in InteractionManager.js. This is more reliable on mobile browsers for continuous gesture scrolling.
+
+---
