@@ -8,10 +8,10 @@ export class LandingPage {
         this.element = document.createElement('div');
         this.element.className = 'mhbn-landing';
 
-        // Generate dummy list items
-        let listItems = '';
+        // Generate V-Items
+        let vItems = '';
         for (let i = 1; i <= 20; i++) {
-            listItems += `<div class="list-item">📜 Scroll Item ${i} - Fist to Scroll</div>`;
+            vItems += `<div class="v-item">📜 Vertical Item ${i}</div>`;
         }
 
         this.element.innerHTML = `
@@ -20,37 +20,39 @@ export class LandingPage {
         <!-- Section 1: Interaction Test -->
         <div class="test-card">
             <h2>👆 Click Test</h2>
-            <p>Pinch your index and thumb to click.</p>
+            <p>Pinch index & thumb.</p>
             <div class="counter-display" id="click-counter">0</div>
             <button class="btn-test" id="test-btn">Hit Me!</button>
         </div>
 
         <!-- Section 2: Navigation Test -->
         <div class="test-card">
-            <h2>🔙 Navigation Test</h2>
-            <p>🤙 Show "Shaka/Call Me" (Thumb & Pinky) to go back.</p>
-            <div class="nav-status">Current: <span id="path-display">/home</span></div>
+            <h2>🔙 Navigation</h2>
+            <p>Gesture: "Call Me" (🤙) to Back.</p>
+            <div style="margin: 20px 0; font-size: 1.2rem; color:#aaa;">Path: <span id="path-display" style="color:#fff;">/home</span></div>
             <button class="btn-test secondary" id="nav-btn">Go to /page2</button>
         </div>
 
         <!-- Section 3: Scroll Test -->
         <div class="test-card full-width">
-            <h2>✊ Scroll Test</h2>
-            <p>Make a Fist and move hand Up/Down or Left/Right.</p>
+            <h2>✊ Scroll Playground</h2>
+            <p style="text-align: left; width: 100%; margin-bottom: 5px; color:#ccc;">1. Hover over the <b>Vertical List</b> and make a Fist to scroll UP/DOWN.</p>
             
-            <!-- Vertical List -->
-            <div class="scroll-area" style="max-height: 150px; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 10px;">
-                ${listItems}
+            <div class="v-scroll-box" id="v-scroll-target">
+                ${vItems}
             </div>
 
-            <!-- Horizontal Gallery -->
-            <div class="h-scroll-area" style="display: flex; gap: 10px; overflow-x: auto; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px;">
-                 <div style="min-width: 120px; height: 80px; background: #FF3B30; border-radius: 8px; display:flex; align-items:center; justify-content:center;">Card 1</div>
-                 <div style="min-width: 120px; height: 80px; background: #ff9500; border-radius: 8px; display:flex; align-items:center; justify-content:center;">Card 2</div>
-                 <div style="min-width: 120px; height: 80px; background: #ffcc00; border-radius: 8px; display:flex; align-items:center; justify-content:center;">Card 3</div>
-                 <div style="min-width: 120px; height: 80px; background: #34c759; border-radius: 8px; display:flex; align-items:center; justify-content:center;">Card 4</div>
-                 <div style="min-width: 120px; height: 80px; background: #007aff; border-radius: 8px; display:flex; align-items:center; justify-content:center;">Card 5</div>
-                 <div style="min-width: 120px; height: 80px; background: #5856d6; border-radius: 8px; display:flex; align-items:center; justify-content:center;">Card 6</div>
+            <p style="text-align: left; width: 100%; margin-top: 20px; margin-bottom: 5px; color:#ccc;">2. Hover over the <b>Horizontal Gallery</b> and make a Fist to scroll LEFT/RIGHT.</p>
+
+            <div class="h-scroll-box" id="h-scroll-target">
+                 <div class="h-card" style="background: #FF3B30;">Red</div>
+                 <div class="h-card" style="background: #FF9500;">Orange</div>
+                 <div class="h-card" style="background: #FFCC00; color:#000;">Yellow</div>
+                 <div class="h-card" style="background: #34C759;">Green</div>
+                 <div class="h-card" style="background: #007AFF;">Blue</div>
+                 <div class="h-card" style="background: #5856D6;">Indigo</div>
+                 <div class="h-card" style="background: #AF52DE;">Purple</div>
+                 <div class="h-card" style="background: #FF2D55;">Pink</div>
             </div>
         </div>
 
@@ -68,15 +70,14 @@ export class LandingPage {
         btn.addEventListener('click', () => {
             this.clickCount++;
             display.innerText = this.clickCount;
-            btn.innerText = 'Clicked!';
-            setTimeout(() => btn.innerText = 'Hit Me!', 500);
+            btn.classList.add('active'); // Use CSS transition if wanted
+            setTimeout(() => btn.classList.remove('active'), 200);
         });
 
         // Nav Test
         const navBtn = this.element.querySelector('#nav-btn');
         const pathDisplay = this.element.querySelector('#path-display');
 
-        // Handle HTML5 History for fake nav
         window.addEventListener('popstate', () => {
             pathDisplay.innerText = window.location.pathname;
         });
@@ -86,7 +87,6 @@ export class LandingPage {
             pathDisplay.innerText = '/page2';
         });
 
-        // Init path
         pathDisplay.innerText = window.location.pathname;
     }
 }

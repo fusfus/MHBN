@@ -170,17 +170,20 @@ export class InteractionManager {
 
     getScrollParent(node) {
         if (!node) return window;
+        if (node === document.body || node === document.documentElement) return window;
 
         const isElement = node instanceof HTMLElement;
-        const overflowY = isElement && window.getComputedStyle(node).overflowY;
-        const overflowX = isElement && window.getComputedStyle(node).overflowX;
-        const isScrollableY = overflowY !== 'visible' && overflowY !== 'hidden';
-        const isScrollableX = overflowX !== 'visible' && overflowX !== 'hidden';
+        if (isElement) {
+            const style = window.getComputedStyle(node);
+            const overflowY = style.overflowY;
+            const overflowX = style.overflowX;
+            // Strict check: must be auto or scroll
+            const isScrollableY = (overflowY === 'auto' || overflowY === 'scroll');
+            const isScrollableX = (overflowX === 'auto' || overflowX === 'scroll');
 
-        if (isElement && (isScrollableY || isScrollableX)) {
-            // Check if it actually has space to scroll?
-            // Not strictly necessary, but helpful.
-            return node;
+            if (isScrollableY || isScrollableX) {
+                return node;
+            }
         }
 
         return node.parentElement ? this.getScrollParent(node.parentElement) : window;
