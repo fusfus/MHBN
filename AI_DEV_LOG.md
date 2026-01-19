@@ -25,3 +25,9 @@
 1. Added missing CSS classes for .h-scroll-box and .v-scroll-box to style.css. 2. Confirmed InteractionManager logic correctly identifies these elements as scroll targets. 3. This enables valid horizontal scrolling in the Landing Page test.
 
 ---
+
+## [2026-01-20 03:28:42] Optimization: Boosted H-Scroll & CSS Fix
+
+1. style.css: Added -webkit-overflow-scrolling: touch to .h-scroll-box for smoother mobile scrolling. 2. InteractionManager.js: Boosted element-specific scroll sensitivity (X*3.0, Y*2.0) to make scrolling internal containers feel more responsive.
+
+---

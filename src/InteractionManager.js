@@ -153,9 +153,10 @@ export class InteractionManager {
 
                 // Apply Scroll
                 if (this.activeScrollElement && this.activeScrollElement !== window) {
+                    // Elements often need "faster" input to feel responsive
                     this.activeScrollElement.scrollBy({
-                        left: deltaX * baseSens * 1.5,
-                        top: deltaY * baseSens,
+                        left: deltaX * baseSens * 3.0, // Boost X for elements
+                        top: deltaY * baseSens * 2.0,  // Boost Y for elements
                         behavior: 'auto'
                     });
                 } else {
