@@ -8,6 +8,40 @@ export class DebugManager {
         this.canvasCtx = null;
         this.infoElement = null;
         this.drawingUtils = null;
+
+        // Session Recording
+        this.worker = new Worker(new URL('./workers/LogWorker.js', import.meta.url));
+        this.worker.onmessage = this.handleWorkerMessage.bind(this);
+        this.worker.postMessage({ type: 'INIT' });
+
+        this.isRecording = false;
+        this.recordBtn = null;
+    }
+
+    handleWorkerMessage(e) {
+        const { type, data } = e.data;
+        if (type === 'EXPORT_READY') {
+            this.downloadJSON(data);
+        } else if (type === 'RECORDING_STARTED') {
+            this.isRecording = true;
+            this.updateRecordBtn();
+        } else if (type === 'RECORDING_STOPPED') {
+            this.isRecording = false;
+            this.updateRecordBtn();
+        }
+    }
+
+    downloadJSON(data) {
+        const jsonStr = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `mhbn_session_${data.id}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 
     createOverlay() {
@@ -96,6 +130,41 @@ export class DebugManager {
         }
 
         this.canvasCtx.restore();
+        this.canvasCtx.restore();
+
+        // REC Logic
+        if (this.isRecording && results && results.landmarks) {
+            // Log frame to worker
+            // We strip heavy data, just keep landmarks & gesture
+            this.worker.postMessage({
+                type: 'LOG_FRAME',
+                payload: {
+                    gesture: gestureName,
+                    landmarks: results.landmarks[0] // just first hand
+                }
+            });
+        }
+    }
+
+    toggleRecording() {
+        if (this.isRecording) {
+            this.worker.postMessage({ type: 'STOP' });
+        } else {
+            this.worker.postMessage({ type: 'START' });
+        }
+    }
+
+    updateRecordBtn() {
+        if (!this.recordBtn) return;
+        if (this.isRecording) {
+            this.recordBtn.innerText = '■ Stop';
+            this.recordBtn.style.background = '#FF3B30';
+            this.recordBtn.style.color = 'white';
+        } else {
+            this.recordBtn.innerText = '● Rec';
+            this.recordBtn.style.background = '';
+            this.recordBtn.style.color = '';
+        }
     }
 }
 

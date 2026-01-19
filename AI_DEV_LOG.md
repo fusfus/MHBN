@@ -61,3 +61,9 @@ Replaced element.scrollBy() with direct scrollLeft/scrollTop assignment. This by
 CRITICAL FIX: InteractionManager.update() was failing to pass 'handX' to handleScroll(), causing horizontal scroll delta to always be zero. This restores horizontal scrolling functionality.
 
 ---
+
+## [2026-01-20 03:42:34] Feature: Session Recording
+
+Implemented DebugManager Layer 3 (Session Recorder). 1. Created LogWorker.js to handle IndexedDB logging in background. 2. Added UI controls (Record, Stop, JSON Export) to Debug Overlay. 3. Integrated data passing from main thread to worker.
+
+---
