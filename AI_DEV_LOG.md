@@ -19,3 +19,9 @@
 1. InteractionManager: Enhanced getScrollParent to check scrollWidth > clientWidth to verify scrollability. 2. Added visual feedback (green outline + toast) when a specific scroll target is locked. 3. style.css: Added -webkit-overflow-scrolling: touch for iOS.
 
 ---
+
+## [2026-01-20 03:26:39] Bugfix: Missing CSS for Horizontal Scroll
+
+1. Added missing CSS classes for .h-scroll-box and .v-scroll-box to style.css. 2. Confirmed InteractionManager logic correctly identifies these elements as scroll targets. 3. This enables valid horizontal scrolling in the Landing Page test.
+
+---

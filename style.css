@@ -378,6 +378,62 @@ body {
   text-align: left;
 }
 
+/* Explicit Scroll Containers */
+.v-scroll-box {
+  width: 100%;
+  height: 250px;
+  /* Fixed height for overflow: auto */
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.h-scroll-box {
+  width: 100%;
+  height: 140px;
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  overflow-x: auto;
+  /* CRITICAL */
+  -webkit-overflow-scrolling: touch;
+  overflow-y: hidden;
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  align-items: center;
+}
+
+.h-card {
+  min-width: 140px;
+  height: 100px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.v-item {
+  background: rgba(255, 255, 255, 0.08);
+  margin-bottom: 8px;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: left;
+  color: #eee;
+  font-size: 1rem;
+}
+
+
 .warning-border {
   border: 2px solid #FF3B30 !important;
   box-shadow: 0 0 15px rgba(255, 59, 48, 0.6) !important;
