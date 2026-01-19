@@ -27,7 +27,7 @@ export class InteractionManager {
         this.currentGesture = gesture;
 
         this.handleClicks(gesture);
-        this.handleScroll(gesture, handY);
+        this.handleScroll(gesture, handY, handX);
         this.handleNavigation(gesture);
     }
 

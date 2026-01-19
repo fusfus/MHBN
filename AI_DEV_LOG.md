@@ -55,3 +55,9 @@ Replaced element.scrollBy() with direct scrollTop/scrollLeft assignment in Inter
 Replaced element.scrollBy() with direct scrollLeft/scrollTop assignment. This bypasses potential mobile browser quirks with scrollBy() inside default-prevented contexts or rapid animation frames.
 
 ---
+
+## [2026-01-20 03:37:38] Bugfix: Enable H-Scroll Argument
+
+CRITICAL FIX: InteractionManager.update() was failing to pass 'handX' to handleScroll(), causing horizontal scroll delta to always be zero. This restores horizontal scrolling functionality.
+
+---
