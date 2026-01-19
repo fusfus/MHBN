@@ -37,3 +37,9 @@
 1. Applied missing -webkit-overflow-scrolling: touch to style.css. 2. This ensures smooth scrolling on iOS devices for the Horizontal Gallery.
 
 ---
+
+## [2026-01-20 03:29:50] Docs: Refine Walkthrough
+
+Cleaned up duplicated sections in the verification steps.
+
+---
