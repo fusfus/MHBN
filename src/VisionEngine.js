@@ -18,8 +18,8 @@ export class VisionEngine {
         // Safari detection
         this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-        // 1. Initialize MediaPipe HandLandmarker
-        // Use a more recent stable version for WASM 
+        // 1. Initialize MediaPipe - ALIGNED VERSION
+        // We use 0.10.18 for both NPM package and WASM to ensure stability.
         const vision = await FilesetResolver.forVisionTasks(
             'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/wasm'
         );
@@ -53,34 +53,22 @@ export class VisionEngine {
         };
 
         try {
-            // SAFARI FIX V4: Dummy Class + getContext Hijacking
-            // 1. "undefined" checks caused "instanceof" error.
-            // 2. Real WebGL caused "kGpuService" error.
-            // Solution: Replace WebGLRenderingContext with a DUMMY CLASS.
-            // This satisfies "instanceof" (it won't throw, just returns false)
-            // and hides the real WebGL capability from Emscripten/MediaPipe.
+            // SAFARI FIX: Polite Denial + Version Alignment
+            // We downgraded package.json to 0.10.18 to match the WASM.
+            // We use "Polite Denial" (hijacking getContext) to force CPU mode gracefully 
+            // without breaking global variables (which caused instanceof errors).
 
-            let savedWebGL = null;
-            let savedWebGL2 = null;
             let originalGetContext = null;
 
             if (this.isSafari) {
-                console.log('VisionEngine: Applying Safari WebGL Dumb-stub...');
+                console.log('VisionEngine: Safari detected. Enforcing CPU mode via context denial.');
 
-                // 1. Backup and Replace Globals with Dummy Class
-                if (window.WebGLRenderingContext) {
-                    savedWebGL = window.WebGLRenderingContext;
-                    window.WebGLRenderingContext = class MockWebGL { };
-                }
-                if (window.WebGL2RenderingContext) {
-                    savedWebGL2 = window.WebGL2RenderingContext;
-                    window.WebGL2RenderingContext = class MockWebGL2 { };
-                }
-
-                // 2. Hijack getContext to ensure no sneakiness
+                // Hijack getContext to return null for WebGL
+                // This forces MediaPipe to fail GPU checking gracefully and fallback.
                 originalGetContext = HTMLCanvasElement.prototype.getContext;
                 HTMLCanvasElement.prototype.getContext = function (type, options) {
                     if (type === 'webgl' || type === 'experimental-webgl' || type === 'webgl2') {
+                        console.log(`VisionEngine: Blocked Safari WebGL request for ${type}`);
                         return null;
                     }
                     return originalGetContext.call(this, type, options);
@@ -91,11 +79,9 @@ export class VisionEngine {
                 this.handLandmarker = await createLandmarker(delegate);
                 console.log(`VisionEngine: HandLandmarker initialized (${delegate})`);
             } finally {
-                // RESTORE Everything immediately
-                if (this.isSafari) {
-                    if (savedWebGL) window.WebGLRenderingContext = savedWebGL;
-                    if (savedWebGL2) window.WebGL2RenderingContext = savedWebGL2;
-                    if (originalGetContext) HTMLCanvasElement.prototype.getContext = originalGetContext;
+                // RESTORE getContext immediately
+                if (this.isSafari && originalGetContext) {
+                    HTMLCanvasElement.prototype.getContext = originalGetContext;
                     console.log('VisionEngine: Safari WebGL Hooks Restored.');
                 }
             }
