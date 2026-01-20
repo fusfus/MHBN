@@ -53,35 +53,64 @@ export class VisionEngine {
         };
 
         try {
-            // SAFARI FIX: Polite Denial + Version Alignment
-            // We downgraded package.json to 0.10.18 to match the WASM.
-            // We use "Polite Denial" (hijacking getContext) to force CPU mode gracefully 
-            // without breaking global variables (which caused instanceof errors).
+            // SAFARI FIX V6: The "Black Hole" WebGL Context
+            // The error "undefined is not an object (evaluating 'GLctx.activeTexture')" 
+            // implies Emscripten's GLctx is null. Returning 'null' from getContext caused this.
+            // We must return a "Black Hole" object that looks like a context but does nothing.
 
             let originalGetContext = null;
+            let originalOffscreenGetContext = null;
 
             if (this.isSafari) {
-                console.log('VisionEngine: Safari detected. Enforcing CPU mode via context denial.');
+                console.log('VisionEngine: Safari detected. Deploying "Black Hole" WebGL Context...');
 
-                // Hijack getContext to return null for WebGL
-                // This forces MediaPipe to fail GPU checking gracefully and fallback.
+                const blackHoleContext = new Proxy(() => { }, {
+                    get: (target, prop) => {
+                        // Return valid-ish values for critical checks
+                        if (prop === 'getExtension') return () => null;
+                        if (prop === 'getParameter') return (p) => 0;
+                        if (prop === 'createTexture') return () => ({});
+                        if (prop === 'createBuffer') return () => ({});
+                        if (prop === 'createProgram') return () => ({});
+                        if (prop === 'createShader') return () => ({});
+                        if (prop === 'checkFramebufferStatus') return () => 36053; // FRAMEBUFFER_COMPLETE
+
+                        // For everything else (activeTexture, bindTexture, etc.), return a void function
+                        return () => { };
+                    }
+                });
+
+                // 1. Hijack HTMLCanvasElement
                 originalGetContext = HTMLCanvasElement.prototype.getContext;
                 HTMLCanvasElement.prototype.getContext = function (type, options) {
                     if (type === 'webgl' || type === 'experimental-webgl' || type === 'webgl2') {
-                        console.log(`VisionEngine: Blocked Safari WebGL request for ${type}`);
-                        return null;
+                        console.log(`VisionEngine: Serving Black Hole Context for ${type}`);
+                        return blackHoleContext;
                     }
                     return originalGetContext.call(this, type, options);
                 };
+
+                // 2. Hijack OffscreenCanvas
+                if (typeof OffscreenCanvas !== 'undefined') {
+                    originalOffscreenGetContext = OffscreenCanvas.prototype.getContext;
+                    OffscreenCanvas.prototype.getContext = function (type, options) {
+                        if (type === 'webgl' || type === 'experimental-webgl' || type === 'webgl2') {
+                            console.log(`VisionEngine: Serving Black Hole Context (Offscreen) for ${type}`);
+                            return blackHoleContext;
+                        }
+                        return originalOffscreenGetContext.call(this, type, options);
+                    };
+                }
             }
 
             try {
                 this.handLandmarker = await createLandmarker(delegate);
                 console.log(`VisionEngine: HandLandmarker initialized (${delegate})`);
             } finally {
-                // RESTORE getContext immediately
-                if (this.isSafari && originalGetContext) {
-                    HTMLCanvasElement.prototype.getContext = originalGetContext;
+                // Restore hooks immediately after initialization
+                if (this.isSafari) {
+                    if (originalGetContext) HTMLCanvasElement.prototype.getContext = originalGetContext;
+                    if (originalOffscreenGetContext) OffscreenCanvas.prototype.getContext = originalOffscreenGetContext;
                     console.log('VisionEngine: Safari WebGL Hooks Restored.');
                 }
             }

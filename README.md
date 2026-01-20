@@ -138,6 +138,23 @@ MHBN 採用模組化架構，專注於效能與使用者體驗：
 *   **視覺運算**: [Google MediaPipe Tasks Vision](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker)
 *   **建置工具**: [Vite](https://vitejs.dev/)
 
+## ⚙️ System Requirements & Compatibility (系統需求與相容性)
+
+| Category | Recommended (推薦) | Minimum (最低需求) |
+| :--- | :--- | :--- |
+| **OS** | macOS (Apple Silicon), Windows 10/11 | macOS (Intel), Windows 7+ |
+| **Browser** | **Google Chrome** (Recommended), Edge | Safari 17+, Firefox |
+| **Device** | Webcam enabled Laptop/PC | Mobile Devices (Pixel, iPhone 14+) |
+
+> [!WARNING]
+> **Compatibility Notice (相容性說明)**:
+> *   **Google Chrome** is the strongly recommended browser for this application due to its superior WebGL and WebAssembly support.
+> *   **Safari on macOS (Intel/x64)** is currently **NOT SUPPORTED** due to WebGL backend incompatibilities with MediaPipe. Please use Chrome.
+> *   **Safari on iOS (iPhone 12+)** is generally supported on iOS 17+.
+> *   強烈建議使用 **Google Chrome** 以獲得最佳效能與穩定性。
+> *   **Safari (Intel 架構 Mac)** 目前因底層 WebGL 相容性問題**不支援**，請改用 Chrome。
+> *   **Safari (iOS)** 目前支援 iOS 17+ 之較新款 iPhone。
+
 ## 📄 授權條款 (License)
 
 本專案採用 **MIT License** 授權 - 詳細內容請參閱 [LICENSE](LICENSE) 檔案。
