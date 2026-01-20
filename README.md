@@ -1,10 +1,14 @@
 # 🖐️ MotionHand Browser Navigator (MHBN)
 
-> Control your web browser with simple hand gestures. No mouse required.
->
-> 透過簡單的手勢控制您的網頁瀏覽器，無需滑鼠。
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Deploy to GitHub Pages](https://github.com/fusfus/MHBN/actions/workflows/deploy.yml/badge.svg)](https://github.com/fusfus/MHBN/actions/workflows/deploy.yml)
+
+**[✨ Live Demo / 線上體驗 : https://fusfus.github.io/MHBN/](https://fusfus.github.io/MHBN/)**
+
+> **MotionHand Browser Navigator** 是一個跨瀏覽器的 JS 函式庫，利用 Google MediaPipe 技術，讓使用者透過 **手勢 (Hand Gestures)** 操控網頁游標與互動。
+>
+> **MotionHand Browser Navigator** is a cross-browser library that enables browser interaction via hand gestures using Google MediaPipe technology. Start controlling the web with just your hands!
+
 [![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![MediaPipe](https://img.shields.io/badge/MediaPipe-Vision-blue)](https://developers.google.com/mediapipe)
 
