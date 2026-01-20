@@ -15,16 +15,28 @@ export class VisionEngine {
             'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm'
         );
 
-        this.handLandmarker = await HandLandmarker.createFromOptions(vision, {
-            baseOptions: {
-                modelAssetPath: `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task`,
-                delegate: 'GPU',
-            },
-            runningMode: 'VIDEO',
-            numHands: 1,
-        });
-
-        console.log('VisionEngine: HandLandmarker initialized');
+        try {
+            this.handLandmarker = await HandLandmarker.createFromOptions(vision, {
+                baseOptions: {
+                    modelAssetPath: `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task`,
+                    delegate: 'GPU',
+                },
+                runningMode: 'VIDEO',
+                numHands: 1,
+            });
+            console.log('VisionEngine: HandLandmarker initialized (GPU)');
+        } catch (error) {
+            console.warn('VisionEngine: GPU initialization failed, falling back to CPU.', error);
+            this.handLandmarker = await HandLandmarker.createFromOptions(vision, {
+                baseOptions: {
+                    modelAssetPath: `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task`,
+                    delegate: 'CPU',
+                },
+                runningMode: 'VIDEO',
+                numHands: 1,
+            });
+            console.log('VisionEngine: HandLandmarker initialized (CPU)');
+        }
     }
 
     async startCamera(videoElement) {
