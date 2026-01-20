@@ -1,14 +1,9 @@
 import './style.css';
-import { visionEngine } from './src/VisionEngine.js';
-import { debugManager } from './src/DebugManager.js';
-import { cursorManager } from './src/CursorManager.js';
-import { gestureRecognizer } from './src/GestureRecognizer.js';
-import { interactionManager } from './src/InteractionManager.js';
-
+import { motionHand } from './src/MotionHand.js';
 import { dashboard } from './src/ui/Dashboard.js';
 import { landingPage } from './src/ui/LandingPage.js';
 
-// Remove old innerHTML setup entirely
+// Init Standalone Dashboard
 document.querySelector('#app').innerHTML = ``;
 dashboard.render();
 
@@ -34,19 +29,10 @@ startBtn.addEventListener('click', async () => {
   startBtn.disabled = true;
 
   try {
-    // 1. Create Debug Overlay (default hidden maybe?)
-    const videoElement = debugManager.createOverlay();
-    // Hide debug overlay by default for premium feel
-    document.querySelector('.debug-overlay').style.display = 'none';
-
-    // 1.1 Init Cursor
-    cursorManager.initialize();
-
-    // 2. Initialize Vision Engine
-    await visionEngine.initialize();
-
-    // 3. Start Camera
-    await visionEngine.startCamera(videoElement);
+    // Initialize the Core System
+    await motionHand.init({
+      showDebug: false // Default to hidden for premium feel
+    });
 
     // Fade out splash
     splash.style.transition = 'opacity 0.5s';
@@ -56,37 +42,6 @@ startBtn.addEventListener('click', async () => {
       // Render Landing Page after splash is gone
       landingPage.render();
     }, 500);
-
-    // 4. Start Render Loop
-    const loop = () => {
-      const result = visionEngine.detect();
-
-      let detectedGesture = 'UNKNOWN';
-
-      if (result && result.raw && result.raw.landmarks && result.raw.landmarks.length > 0) {
-        const landmarks = result.raw.landmarks[0];
-        detectedGesture = gestureRecognizer.detect(landmarks);
-
-        debugManager.update(result.raw, detectedGesture, result.isOutOfBounds);
-        if (result.cursor) {
-          interactionManager.update(detectedGesture, result.cursor.y, result.cursor.x);
-        }
-      } else {
-        debugManager.update(null, 'NO HAND');
-      }
-
-      // Update Dashboard
-      dashboard.updateGesture(detectedGesture, result ? result.isOutOfBounds : false);
-
-      if (result && result.cursor) {
-        cursorManager.show();
-        // Pass gesture to cursor if we want to change cursor icon based on gesture (e.g. Fist icon)
-        cursorManager.updatePosition(result.cursor.x, result.cursor.y);
-      }
-
-      requestAnimationFrame(loop);
-    };
-    loop();
 
   } catch (error) {
     console.error('Failed to start:', error);
