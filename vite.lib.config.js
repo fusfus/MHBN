@@ -8,7 +8,10 @@ export default defineConfig({
         lib: {
             entry: resolve(__dirname, 'src/MotionHand.js'),
             name: 'MotionHand',
-            fileName: 'motion-hand',
+            fileName: (format) => {
+                if (format === 'umd') return 'main.js';
+                return `main.${format}.js`;
+            },
             formats: ['es', 'umd'], // Generate ESM and UMD bundles
         },
         rollupOptions: {

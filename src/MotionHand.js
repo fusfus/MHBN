@@ -85,3 +85,32 @@ export class MotionHandSystem {
 }
 
 export const motionHand = new MotionHandSystem();
+
+// Auto-Initialization for Standalone/External Usage
+if (typeof window !== 'undefined') {
+    window.onload = () => {
+        const autoInitGlobal = window.MHBN_AUTO_INIT === true;
+        let autoInitScript = false;
+
+        // Check for script tag attribute: <script src="..." data-auto-init="true">
+        // Note: document.currentScript is only available during script execution, 
+        // effectively for UMD/IIFE scripts, not modules if deferred.
+        if (document.currentScript && document.currentScript.getAttribute('data-auto-init') === 'true') {
+            autoInitScript = true;
+        } else {
+            // Fallback: search all scripts if we missed it (e.g. for modules or async)
+            const scripts = document.querySelectorAll('script');
+            for (let script of scripts) {
+                if (script.src.includes('main.js') && script.getAttribute('data-auto-init') === 'true') {
+                    autoInitScript = true;
+                    break;
+                }
+            }
+        }
+
+        if (autoInitGlobal || autoInitScript) {
+            console.log('MotionHand: Auto-initializing...');
+            motionHand.init({ showDebug: true });
+        }
+    };
+}

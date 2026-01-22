@@ -140,7 +140,48 @@ MHBN 採用模組化架構，專注於效能與使用者體驗：
 
 *   **核心**: Vanilla JavaScript (ES6+), HTML5, CSS3
 *   **視覺運算**: [Google MediaPipe Tasks Vision](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker)
-*   **建置工具**: [Vite](https://vitejs.dev/)
+*   **Build Tool**: [Vite](https://vitejs.dev/)
+
+## 📦 External / Standalone Usage (外部引用 / 獨立使用)
+
+You can use MHBN in any HTML project without Node.js or build tools.
+您可以直接在任何 HTML 專案中使用 MHBN，無需 Node.js 或建置工具。
+
+### Setup (設定步驟)
+
+1.  **Copy the Library**: Copy the `dist/lib` folder to your project root.
+    **複製檔案**: 將 `dist/lib` 資料夾複製到您的專案根目錄。
+
+2.  **Add Script**: Include `main.js` in your HTML. Use `data-auto-init="true"` to start automatically.
+    **加入腳本**: 在 HTML 中引入 `main.js`。使用 `data-auto-init="true"` 讓它自動啟動。
+
+    ```html
+    <!-- Example: index.html -->
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>My Web App</title>
+    </head>
+    <body>
+        <h1>Control me with your hands!</h1>
+        
+        <!-- Load MHBN and auto-start -->
+        <script src="lib/main.js" data-auto-init="true"></script>
+    </body>
+    </html>
+    ```
+
+### Configuration (設定)
+If you prefer manual initialization (如果您希望手動啟動):
+```html
+<script src="lib/main.js"></script>
+<script>
+  window.onload = function() {
+    // Start with debug overlay
+    MotionHand.motionHand.init({ showDebug: true });
+  };
+</script>
+```
 
 ## ⚙️ System Requirements & Compatibility (系統需求與相容性)
 

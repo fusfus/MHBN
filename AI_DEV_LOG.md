@@ -73,3 +73,9 @@ Implemented DebugManager Layer 3 (Session Recorder). 1. Created LogWorker.js to 
 Updated walkthrough.md to reflect the project's Feature Complete status after implementing the Session Recorder and fixing all scrolling issues.
 
 ---
+
+## [2026-01-22 18:18:58] Enhance External Usage Mechanism
+
+Enhanced the library for plug-and-play usage. 1. Updated vite.lib.config.js to output 'main.js' for UMD builds. 2. Added auto-initialization logic to MotionHand.js via data-auto-init attribute. 3. Updated README.md with standalone usage instructions.
+
+---
